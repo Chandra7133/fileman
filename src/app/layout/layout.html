@@ -1,0 +1,70 @@
+<div class="container mt-4">
+ <div class="card shadow-sm border-0 rounded-3">
+  <div class="card-body py-4 px-4 bg-primary text-white">
+   <h4 class="fw-semibold mb-4">🗂️ FileMan</h4>
+
+   <!-- Directory Input -->
+   <div class="mb-3">
+    <label class="form-label">Directory</label>
+    <div class="input-group">
+     <input type="text" class="form-control" [(ngModel)]="directoryPath" name="directory" [disabled]="true" />
+     <button class="btn btn-outline-light" type="button" (click)="goUp()">
+      ⬆️
+     </button>
+    </div>
+   </div>
+
+   <!-- Folder Dropdown -->
+   <div class="mb-3">
+    <label class="form-label">Folders</label>
+    <div class="input-group">
+     <select class="form-select" [(ngModel)]="selectedFolder" name="folder" (change)="onFolderChange(selectedFolder)">
+      @for(folder of folderList; track $index) {
+      <option [value]="folder">{{ folder }}</option>
+      }
+     </select>
+     <button class="btn btn-outline-light" type="button" (click)="showAddFolder = !showAddFolder">
+      ➕
+     </button>
+    </div>
+    @if(showAddFolder){
+    <div class="input-group mt-2">
+     <input type="text" class="form-control" [(ngModel)]="newFolderName" placeholder="New folder name" />
+     <button class="btn btn-light" type="button" (click)="addFolder()">Add</button>
+    </div>
+    }
+   </div>
+
+   <!-- File Dropdown -->
+   <div class="mb-3">
+    <label class="form-label">Files</label>
+    <div class="input-group">
+     <select class="form-select" [(ngModel)]="selectedFile" name="file">
+      @for (file of fileList; track $index) {
+      <option [value]="file" [disabled]="!isAllowedFile(file)">{{ file }}</option>
+      }
+     </select>
+     <button type="button" class="btn btn-outline-secondary" (click)="showAddFile = !showAddFile">
+      ➕
+     </button>
+    </div>
+   </div>
+
+   @if (showAddFile) {
+   <div class="mb-3 d-flex gap-2 align-items-center">
+    <input type="text" class="form-control" placeholder="Enter file name" [(ngModel)]="newFileName" />
+    <select class="form-select" [(ngModel)]="selectedExtension">
+     <option value=".txt">.txt</option>
+     <option value=".xlsx">.xlsx</option>
+    </select>
+    <button class="btn btn-success" (click)="createFile()">Add</button>
+   </div>
+   }
+
+   <div class="mb-3 d-flex justify-content-center">
+    <button class="btn btn-warning" (click)="modifyFile()">Modify</button>
+  </div>
+
+  </div>
+ </div>
+</div>
