@@ -45,7 +45,10 @@
        "outputHashing": "all"
       },
       "development": {
-       "optimization": false,
+       "optimization": true,
+       "outputHashing": "all",
+       "sourceMap": false,
+       "extractCss": true,
        "extractLicenses": false,
        "sourceMap": true
       }
