@@ -10,7 +10,7 @@ import { ChangeDetectorRef } from '@angular/core';
  templateUrl: './layout.html',
 })
 export class Layout implements OnInit {
- directoryPath = '/home/chandra/Desktop';
+ directoryPath = '/home';
  folderList: string[] = [];
  fileList: string[] = [];
  selectedFolder: string = '';
