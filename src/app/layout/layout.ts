@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { File } from '../utils/file';
 import { Router } from "@angular/router"
-
+import { ChangeDetectorRef } from '@angular/core';
 @Component({
  selector: 'app-layout',
  standalone: true,
@@ -22,15 +22,13 @@ export class Layout implements OnInit {
  selectedExtension = '.txt';
  private readonly file = inject(File)
  private readonly router = inject(Router)
-
+ private readonly cd = inject(ChangeDetectorRef)
  ngOnInit(): void {
-  setTimeout(() => {
-   const dir = localStorage.getItem("directory") || ""
-   if(dir){
-    this.directoryPath = dir;
-   }
-   this.loadDirectory(this.directoryPath);
-  }, 100)
+  const dir = localStorage.getItem("directory") || ""
+  if (dir) {
+   this.directoryPath = dir;
+  }
+  this.loadDirectory(this.directoryPath);
  }
 
  goUp() {
@@ -76,14 +74,15 @@ export class Layout implements OnInit {
   return file.toLowerCase().endsWith('.xlsx') || file.toLowerCase().endsWith('.txt');
  }
 
-
  async loadDirectory(path: string) {
   this.file.listFoldersAndFiles(path).then((result: any) => {
    this.folderList = result.folders;
    this.fileList = result.files;
+   this.cd.detectChanges();
   }).catch((err: Error) => {
    this.folderList = [];
    this.fileList = [];
+   this.cd.detectChanges();
   });
  }
 
@@ -98,11 +97,13 @@ export class Layout implements OnInit {
    alert('Please select a file to modify.');
    return;
   }
-  this.directoryPath = `${this.directoryPath}/${this.selectedFile}`;
-  localStorage.setItem("directory",this.directoryPath);
   if (this.selectedFile.toLowerCase().endsWith('.txt')) {
+   this.directoryPath = `${this.directoryPath}/${this.selectedFile}`;
+   localStorage.setItem("directory", this.directoryPath);
    this.router.navigate(["textfile"])
-  } else if (this.selectedFile.toLowerCase().endsWith('.xlxs')) {
+  } else if (this.selectedFile.toLowerCase().endsWith('.xlsx')) {
+   this.directoryPath = `${this.directoryPath}/${this.selectedFile}`;
+   localStorage.setItem("directory", this.directoryPath);
    this.router.navigate(["excelfile"])
   }
  }

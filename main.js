@@ -23,5 +23,10 @@ app.whenReady().then(() => {
 });
 ipcMain.handle('create-folder', async (event, folderPath) => { return await CURD.createFolder(folderPath); });
 ipcMain.handle('create-file', async (event, path) => { return await CURD.createFile(path); });
-ipcMain.handle('read-file', (event, filePath) => CURD.readTextFile(filePath));
-ipcMain.handle('write-file', (event, filePath, content) => CURD.writeTextFile(filePath, content));
+ipcMain.handle('read-text-file', (event, path) => CURD.readTextFile(path));
+ipcMain.handle('write-text-file', (event, path, content) => CURD.writeTextFile(path, content));
+ipcMain.handle('read-excel-file', (event, path) => CURD.readExcelData(path));
+ipcMain.handle('create-excel-record', (event, path, content) => CURD.createExcelRecord(path, content));
+ipcMain.handle('update-excel-record', (event, path, id, content) => CURD.updateExcelRecord(path, id, content));
+ipcMain.handle('remove-excel-record', (event, path, id) => CURD.removeExcelRecord(path, id));
+

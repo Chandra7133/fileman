@@ -1,13 +1,43 @@
 {
  "name": "fileman",
- "version": "0.0.0",
+ "version": "1.0.0",
  "description": "file manager",
  "main": "main.js",
+ "author": {
+  "name": "Chandra Sekhar",
+  "email": "chandrasekhar@bijib.com"
+ },
+ "homepage": "https://github.com/Chandra7133/fileman",
+ "build": {
+  "appId": "com.chandra.fileman",
+  "productName": "FileMan",
+  "directories": {
+   "output": "release"
+  },
+  "files": [
+   "dist/",
+   "main.js",
+   "preload.js",
+   "file-curd.js",
+   "file-handler.js",
+   "package.json",
+   "public/"
+  ],
+  "linux": {
+   "target": [
+    "deb"
+   ],
+   "category": "Utility",
+   "icon": "public/icon.png",
+   "maintainer": "Chandra Sekhar <chandrasekhar@bijib.com>"
+  }
+ },
  "scripts": {
   "ng": "ng",
   "start": "ng serve",
   "build": "ng build",
   "electron": "ng build --base-href ./ && electron .",
+  "electron:linux": "ng build --base-href ./ && electron-builder --linux deb",
   "watch": "ng build --watch --configuration development",
   "test": "ng test"
  },
@@ -41,6 +71,7 @@
   "@angular/compiler-cli": "^20.0.0",
   "@types/jasmine": "~5.1.0",
   "electron": "^37.2.1",
+  "electron-builder": "^26.0.12",
   "jasmine-core": "~5.7.0",
   "karma": "~6.4.0",
   "karma-chrome-launcher": "~3.2.0",

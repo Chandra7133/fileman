@@ -52,6 +52,46 @@ const writeTextFile = async (filePath, content) => {
  }
 };
 
+const readExcelData = (filePath) => {
+ if (!fs.existsSync(filePath)) return [];
+ const workbook = XLSX.readFile(filePath);
+ const sheetName = workbook.SheetNames[0];
+ const sheet = workbook.Sheets[sheetName];
+ return XLSX.utils.sheet_to_json(sheet);
+};
+
+const createExcelRecord = (filePath, newItem) => {
+ const data = readExcelData(filePath);
+ newItem.id = Date.now();
+ data.push(newItem);
+ writeExcelData(filePath, data);
+ return newItem;
+};
+
+const updateExcelRecord = (filePath, id, updatedItem) => {
+ let data = readExcelData(filePath);
+ const index = data.findIndex((item) => item.id === id);
+ if (index === -1) return null;
+ data[index] = { ...data[index], ...updatedItem };
+ writeExcelData(filePath, data);
+ return data[index];
+};
+
+const removeExcelRecord = (filePath, id) => {
+ let data = readExcelData(filePath);
+ const newData = data.filter((item) => item.id !== id);
+ writeExcelData(filePath, newData);
+ return true;
+};
+
+const writeExcelData = (filePath, data) => {
+ const wb = XLSX.utils.book_new();
+ const ws = XLSX.utils.json_to_sheet(data);
+ XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+ XLSX.writeFile(wb, filePath);
+};
+
 module.exports = {
- createFolder, createFile, readTextFile, writeTextFile
+ createFolder, createFile, readTextFile, writeTextFile, readExcelData, createExcelRecord,
+ updateExcelRecord, removeExcelRecord
 }

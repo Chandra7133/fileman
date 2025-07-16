@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { File } from '../../utils/file';
 import { FormsModule } from '@angular/forms';
 import { Router } from "@angular/router"
-
+import { ChangeDetectorRef } from '@angular/core';
 @Component({
  selector: 'app-textfile',
  imports: [FormsModule],
@@ -13,6 +13,7 @@ export class Textfile implements OnInit {
  editMode = false;
  private readonly file = inject(File)
  private readonly router = inject(Router)
+ private readonly cd = inject(ChangeDetectorRef)
  dir: string = localStorage.getItem("directory") || "";
 
  ngOnInit(): void {
@@ -22,9 +23,10 @@ export class Textfile implements OnInit {
  openTextFile() {
   const fullPath = localStorage.getItem("directory") || "";
   if (fullPath) {
-   this.file.readFile(fullPath).then(content => {
+   this.file.readTextFile(fullPath).then(content => {
     this.selectedFileContent = content;
     this.editMode = true;
+    this.cd.detectChanges();
    });
   }
  }
@@ -32,19 +34,19 @@ export class Textfile implements OnInit {
  saveTextFile() {
   const fullPath = localStorage.getItem("directory") || "";
   if (fullPath) {
-   this.file.writeFile(fullPath, this.selectedFileContent).then(success => {
+   this.file.writeTextFile(fullPath, this.selectedFileContent).then(success => {
     if (success) alert('File saved successfully');
     else alert('Failed to save file');
    });
   }
  }
 
- goback(){
+ goback() {
   const parts = this.dir.split('/');
   if (parts.length > 1) {
-   parts.pop(); 
+   parts.pop();
    const dir = parts.join('/') || '/';
-   localStorage.setItem("directory",dir);
+   localStorage.setItem("directory", dir);
    this.router.navigate(["layout"])
   }
  }
